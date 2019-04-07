@@ -1,0 +1,17 @@
+targets:
+  $default: #定义目标库，关键字$default默认为当前库
+    builders: #构建的两个库
+      code_generator_gen|code_generator:
+        enabled: true #可选，是否将构建器应用于此目标
+
+builders:
+  code_generator:
+    target: ":code_generator_gen" #目标库
+    import: "package:code_generator_gen/builder.dart" #build文件
+    builder_factories: ["codeGenerator"] #build文件中对应的方法
+    build_extensions: {".dart": [".code_generator.g.part"]}
+    auto_apply: dependents #将此Builder应用于包，直接依赖于公开构建起的包
+    build_to: cache #输出转到隐藏的构建缓存，不会发布
+    applies_builders: ["source_gen|combining_builder"] #指定是否可以延迟运行构建器
+
+# 以上参数具体参考 https://github.com/dart-lang/build/blob/master/build_config/README.md
